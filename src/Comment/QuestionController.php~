@@ -1,0 +1,18 @@
+<?php
+namespace Anax\Comment;
+
+class QuestionController extends \Anax\Comment\CommentController
+{
+    public function selectCommentAction($id)
+    {
+        //hämta frågan från DB
+        $question = $this->getCommentByIDAction($id);
+        //visa frågan, tillsammans med eventuella kommentarer
+        
+        //gör det möjligt att kommentera frågan
+        
+        //gör det möjligt att besvara frågan
+        
+        $this->views->add('comment/selected_comment', ['id' => $id, 'question' => $question->message]);
+    }
+}

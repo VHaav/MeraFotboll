@@ -1,0 +1,91 @@
+<h2>Fråga</h2>
+<div class="divQuestion">
+    <p>ID: <?=$id?></p>
+    <p><?=$question->message?></p>
+    <p><?=$question->timestamp?></p>
+    <p>
+        <?php 
+            foreach($tags as $tag){
+                echo "<a href='{$this->url->create("comment/get-comments-by-tag/{$tag->tag}")}'><div class='single_tag'>{$tag->tag}</div></a>";
+            }
+        ?>
+    </p>    
+    <div class="divQuestionComments">
+        <?php if (isset($comments) && is_array($comments)) : ?>
+            <?php $counter = 1; ?>
+            <?php foreach($comments as $comment) : ?>
+                <div class="divSingleComment">
+                    <?php
+                        echo <<<EOD
+                            <h3>#{$counter}</h3>
+                            <p>{$comment->text}</p>
+                            <p>{$comment->user}</p>
+                            <p>{$comment->created}</p>
+EOD;
+                        $counter++;
+                    ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    
+    <div class="divQuestionCommentForm">
+        <form method="post">
+            <input type="hidden" name="questionID" value="<?=$id?>"/>
+            <textarea name="comment" rows="3" cols="70" required></textarea>
+            <p><input type="submit" name="doComment" value="Kommentera" onclick="this.form.action='<?=$this->url->create("comment-comment/add-comment-to-question") ?>'"/></p>
+        </form>
+    </div>
+    
+    <div class="divQuestionAnswears">
+        <h2>Svar</h2>
+        <?php if (isset($answears) && is_array($answears)) : ?>
+            <?php $counter = 1; ?>
+            <?php foreach($answears as $answear) : ?>
+                <div class="divSingleAnswear" id="<?=$answear->id?>">
+                    <?php
+                        $commentCounter = 1;
+                        $html = <<<EOD
+                            <h3>#{$counter}</h3>
+                            <p>{$answear->text}</p>
+                            <p>{$answear->user}</p>
+                            <p>{$answear->created}</p>
+EOD;
+                        foreach($answear->comments as $comment){
+                            $html .= <<<EOD
+                                <div class="divSingleComment">
+                                    <h4>Kommentar #{$commentCounter}</h4>
+                                    <p>{$comment->text}</p>
+                                    <p>{$comment->user}</p>
+                                    <p>{$comment->created}</p>
+                                </div>                            
+EOD;
+                            $commentCounter++;
+                        }
+                        echo $html;
+                        $counter++;
+                    ?>
+                    <?php if(!isset($_POST["answear_{$answear->id}"])): ?>
+                        <form method="post" action="<?=$this->url->create("comment/select-comment/$id#{$answear->id}") ?>">
+                            <input type="hidden" name="questionID" value="<?=$id?>"/>
+                            <input type="submit" name="answear_<?=$answear->id?>" value="Kommentera"/>
+                        </form>
+                    <?php else: ?>
+                        <form method="post">
+                            <input type="hidden" name="answearID" value="<?=$answear->id?>"/>
+                            <input type="hidden" name="questionID" value="<?=$id?>"/>
+                            <textarea name="comment" rows="3" cols="70" required></textarea>
+                            <p><input type="submit" name="doSaveComment" value="Kommentera" onclick="this.form.action='<?=$this->url->create("comment-comment/add-comment-to-answear") ?>'" /></p>
+                        </form>
+                    <?php endif ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    
+    <div>
+        <form method="post">
+            <input class="btnAnswear" type="submit" name="doAnswear" value="Besvara" onclick="this.form.action='<?=$this->url->create("form/answear-form/$id") ?>'"/>
+        </form>
+    </div>
+</div>

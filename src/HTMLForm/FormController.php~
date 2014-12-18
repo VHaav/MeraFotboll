@@ -1,0 +1,127 @@
+<?php
+
+namespace Anax\HTMLForm;
+
+/**
+ * Anax base class for wrapping sessions.
+ *
+ */
+class FormController
+{
+    use \Anax\DI\TInjectionaware,
+        \Anax\MVC\TRedirectHelpers;
+
+    /**
+     * Index action.
+     *
+     */
+    public function indexAction()
+    {
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormExample();
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->theme->setTitle("Testing CForm with Anax");
+        $this->di->views->add('me/page', [
+            'title' => "Try out a form using CForm",
+            'content' => $form->getHTML()
+        ]);
+    }
+    
+    public function addUserAction()
+    {
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormUser();
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->theme->setTitle("Add user");
+        $this->di->views->add('me/page', [
+            'title' => "Add new user",
+            'content' => $form->getHTML()
+        ]);
+    }
+    
+    public function loginAction()
+    {        
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormLogin();
+        $form->setDI($this->di);
+        $form->check();
+        
+        $this->di->theme->setTitle("Login");        
+        $this->di->views->add('users/login', [
+            'title' => "Login",
+            'content' => $form->getHTML()
+        ]);        
+    }
+    
+    public function updateUserAction($params)
+    {
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormUpdateUser([
+                                            'id' => $params['id'],
+                                            'acronym' => $params['acronym'],
+                                            'name' => $params['name'], 
+                                            'email' => $params['email'],]);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->theme->setTitle("Add user");
+        $this->di->views->add('me/page', [
+            'title' => "Add new user",
+            'content' => $form->getHTML()
+        ]);
+    }
+    
+    public function commentFormAction()
+    {
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormComment();
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->views->add('comment/form', ['form' => $form->getHTML()]);
+    }
+    
+    public function editCommentAction($params)
+    {
+        $this->di->session();
+        
+        $form = new \Anax\HTMLForm\CFormEditComment([
+                                            'id' => $params['id'],
+                                            'name' => $params['name'],
+                                            'homepage' => $params['homepage'], 
+                                            'message' => $params['message'],]);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->views->add('comment/form', [
+            'form' => $form->getHTML()
+        ]);
+    }
+    
+    /**
+    * Takes the id of the question that the answear belongs to
+    **/
+    public function answearFormAction($id)
+    {
+        //$this->di->session();
+        
+        $form = new \Anax\HTMLForm\CFormAnswear($id);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->dispatcher->forward([
+            'controller' => 'answear',
+            'action' => 'answear-form',
+            'params' => [$id, $form]
+        ]);
+    }
+}

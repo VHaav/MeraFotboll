@@ -1,0 +1,147 @@
+/**
+ * General elements
+ */
+
+@import url(figure.css);
+@import url(table.css);
+@import url(flash.css);
+@import url(font-awesome-4.2.0/css/font-awesome.css);
+
+body {
+  color: #333;
+  font-family: 'Raleway', 'Open Sans', arial, sans-serif;
+  overflow-y: scroll;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+
+/**
+ * Layout of the main page elements 
+ */
+#wrapper {
+  margin: 0 auto;
+  width: 980px; 
+  padding: 10px;
+}
+
+
+/**
+ * Layout for header
+ */
+#header {
+  position: relative;
+  margin-bottom: 40px;
+  font-family: 'Indie Flower';
+}
+
+.sitetitle {
+  position: absolute;
+  top: 0.2em;
+  left: 3em;
+  font-size: 48px;
+}
+
+.siteslogan {
+  position: absolute;
+  top: 4em;
+  left: 9em;
+  font-style: italic;
+  color: #666;
+}
+
+.sitelogo {
+    max-width: 9em;
+    max-height: 9em;
+}
+
+
+/**
+ * Layout for main
+ */
+#main {
+  min-height: 20em;
+}
+
+
+/**
+ * Layout for footer
+ */
+#footer {
+  margin-top: 40px;
+  border-top: 1px solid #ccc;
+  padding-top: 22px;
+}
+
+.sitefooter {
+  color: #666;
+  font-size: 0.8em;
+}
+
+
+/**
+ * For articles
+ */
+.article1 {
+  width: 700px;
+  border-right: 15px solid #FF6500;
+  padding-right: 1em;
+}
+
+.article1 h1 {
+  border-bottom: 15px solid #FF0000;
+}
+
+.byline {
+  margin-top: 44px;
+  border-top: 5px dashed #FF0000;
+  padding-top: 22px;
+  color: #666;
+  font-size: 0.7em;
+}
+
+.byline p {
+  margin-top: 0;
+}
+
+/** Position classes
+*/
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.inline {
+    display: inline;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.top {
+    margin-top: 0px;
+}
+
+.bottom {
+    margin-bottom: 0px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/**Generall style
+*/
+
+.fine-text {
+   font-size: smaller;
+   font-style: italic;
+}

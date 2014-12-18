@@ -1,0 +1,16 @@
+/**
+ * Style for comment-form
+ */
+
+.comment-form {
+    max-width: 75%;
+}
+
+label {
+    font-size: smaller;
+}
+
+textarea {
+    width: 41em;
+    height: 10em;
+}

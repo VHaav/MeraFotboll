@@ -1,17 +1,23 @@
+@import url(figure.css);
+@import url(form.css);
+@import url(table.css);
+@import url(flash.css);
+@import url(navbar_me.css);
+@import url(links.css);
+@import url(comment.css);
+@import url(font-awesome-4.2.0/css/font-awesome.css);
+
 /**
  * General elements
  */
 
-@import url(figure.css);
-
 body {
   color: #333;
-  font-family: arial, sans-serif;
   overflow-y: scroll;
 }
 
 h1 {
-  font-size: 2.2em;
+  font-size: 2.5em;
 }
 
 
@@ -33,19 +39,22 @@ h1 {
   margin-bottom: 40px;
 }
 
+#loggin {
+    padding: 1em;
+}
+
 .sitetitle {
-  position: absolute;
-  top: 6px;
-  left: 130px;
-  font-size: 48px;
+  font-size: 3em;
 }
 
 .siteslogan {
-  position: absolute;
-  top: 65px;
-  left: 130px;
   font-style: italic;
   color: #666;
+}
+
+.sitelogo {
+    max-width: 9em;
+    max-height: 9em;
 }
 
 
@@ -68,6 +77,7 @@ h1 {
 
 .sitefooter {
   color: #666;
+  font-size: 0.8em;
 }
 
 
@@ -76,22 +86,62 @@ h1 {
  */
 .article1 {
   width: 700px;
-  border-right: 1px solid #ccc;
+  border-right: 15px solid #FF6500;
   padding-right: 1em;
 }
 
-.article1 h1,
-.article1 h2 {
-  border-bottom: 1px solid #ccc;
+.article1 h1 {
+  border-bottom: 15px solid #FF0000;
 }
 
 .byline {
   margin-top: 44px;
-  border-top: 1px dashed #ccc;
+  border-top: 5px dashed #FF0000;
   padding-top: 22px;
   color: #666;
+  font-size: 0.7em;
 }
 
 .byline p {
   margin-top: 0;
+}
+
+/** Position classes
+*/
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.inline {
+    display: inline;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.top {
+    margin-top: 0px;
+}
+
+.bottom {
+    margin-bottom: 0px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/**Generall style
+*/
+
+.fine-text {
+   font-size: smaller;
+   font-style: italic;
 }

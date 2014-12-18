@@ -11,103 +11,117 @@ class FormController
     use \Anax\DI\TInjectionaware,
         \Anax\MVC\TRedirectHelpers;
 
-
-
     /**
      * Index action.
      *
      */
     public function indexAction()
     {
-        $this->di->session(); // Will load the session service which also starts the session
-
-        $form = $this->di->form->create([], [
-            'name' => [
-                'type'        => 'text',
-                'label'       => 'Name of contact person:',
-                'required'    => true,
-                'validation'  => ['not_empty'],
-            ],
-            'email' => [
-                'type'        => 'text',
-                'required'    => true,
-                'validation'  => ['not_empty', 'email_adress'],
-            ],
-            'phone' => [
-                'type'        => 'text',
-                'required'    => true,
-                'validation'  => ['not_empty', 'numeric'],
-            ],
-            'submit' => [
-                'type'      => 'submit',
-                'callback'  => [$this, 'callbackSubmit'],
-            ],
-            'submit-fail' => [
-                'type'      => 'submit',
-                'callback'  => [$this, 'callbackSubmitFail'],
-            ],
-        ]);
-
-
-        // Check the status of the form
-        $form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormExample();
+        $form->setDI($this->di);
+        $form->check();
+     
         $this->di->theme->setTitle("Testing CForm with Anax");
-        $this->di->views->add('default/page', [
+        $this->di->views->add('me/page', [
             'title' => "Try out a form using CForm",
             'content' => $form->getHTML()
         ]);
     }
-
-
-
-    /**
-     * Callback for submit-button.
-     *
-     */
-    public function callbackSubmit($form)
+    
+    public function addUserAction()
     {
-        $form->AddOutput("<p><i>DoSubmit(): Form was submitted. Do stuff (save to database) and return true (success) or false (failed processing form)</i></p>");
-        $form->AddOutput("<p><b>Name: " . $form->Value('name') . "</b></p>");
-        $form->AddOutput("<p><b>Email: " . $form->Value('email') . "</b></p>");
-        $form->AddOutput("<p><b>Phone: " . $form->Value('phone') . "</b></p>");
-        $form->saveInSession = true;
-        return true;
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormUser();
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->theme->setTitle("Add user");
+        $this->di->views->add('users/login', [
+            'title' => "Add new user",
+            'content' => $form->getHTML()
+        ]);
     }
-
-
-
-    /**
-     * Callback for submit-button.
-     *
-     */
-    public function callbackSubmitFail($form)
-    {
-        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
-        return false;
+    
+    public function loginAction()
+    {        
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormLogin();
+        $form->setDI($this->di);
+        $form->check();
+        
+        $this->di->theme->setTitle("Login");        
+        $this->di->views->add('users/login', [
+            'title' => "Login",
+            'content' => $form->getHTML()
+        ]);        
     }
-
-
-
-    /**
-     * Callback What to do if the form was submitted?
-     *
-     */
-    public function callbackSuccess($form)
+    
+    public function updateUserAction($params)
     {
-        $form->AddOUtput("<p><i>Form was submitted and the callback method returned true.</i></p>");
-        $this->redirectTo();
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormUpdateUser([
+                                            'id' => $params['id'],
+                                            'acronym' => $params['acronym'],
+                                            'name' => $params['name'], 
+                                            'email' => $params['email'],]);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->theme->setTitle("Add user");
+        $this->di->views->add('users/login', [
+            'title' => "Add new user",
+            'content' => $form->getHTML()
+        ]);
     }
-
-
-
-    /**
-     * Callback What to do when form could not be processed?
-     *
-     */
-    public function callbackFail($form)
+    
+    public function commentFormAction()
     {
-        $form->AddOutput("<p><i>Form was submitted and the Check() method returned false.</i></p>");
-        $this->redirectTo();
+        $this->di->session();
+ 
+        $form = new \Anax\HTMLForm\CFormComment();
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->views->add('comment/form', ['form' => $form->getHTML()]);
+    }
+    
+    public function editCommentAction($params)
+    {
+        $this->di->session();
+        
+        $form = new \Anax\HTMLForm\CFormEditComment([
+                                            'id' => $params['id'],
+                                            'name' => $params['name'],
+                                            'homepage' => $params['homepage'], 
+                                            'message' => $params['message'],]);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->views->add('comment/form', [
+            'form' => $form->getHTML()
+        ]);
+    }
+    
+    /**
+    * Takes the id of the question that the answear belongs to
+    **/
+    public function answearFormAction($id)
+    {
+        $this->di->session();
+        
+        $form = new \Anax\HTMLForm\CFormAnswear($id);
+        $form->setDI($this->di);
+        $form->check();
+     
+        $this->di->dispatcher->forward([
+            'controller' => 'answear',
+            'action' => 'answear-form',
+            'params' => [$id, $form]
+        ]);
     }
 }

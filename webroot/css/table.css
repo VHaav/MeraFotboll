@@ -1,0 +1,12 @@
+.table-users {
+    margin: 1em;
+    margin-bottom: 3em;
+}
+
+.table-users tr th {
+    padding: 0.5em;
+}
+
+.table-users tr td {
+    padding: 0.5em;
+}

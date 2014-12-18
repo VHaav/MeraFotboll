@@ -1,0 +1,20 @@
+/**
+ * Style for forms
+ */
+
+ 
+ 
+/**
+*Specific form elements
+**/
+
+.divQuestionAnswears {
+    margin-top: 3em;
+    clear: both;
+}
+
+.btnAnswear {
+    margin-top: 3em;
+    width: 8em;
+    height: 3em;    
+}

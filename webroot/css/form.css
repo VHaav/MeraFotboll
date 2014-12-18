@@ -1,28 +1,57 @@
 /**
  * Style for forms
  */
-label {
-  font-size: smaller;
+
+ 
+ 
+/**
+*Specific form elements
+**/
+
+.divQuestionAnswears {
+    margin-top: 3em;
+    clear: both;
 }
 
-input[type=text],
-input[type=password] {
-  font-size: 1.2em;
-  width: 500px;
+.btnAnswear {
+    margin-top: 1em;
+    width: 8em;
+    height: 3em;    
 }
 
-input[type=submit],
-input[type=reset] {
-  font-size: 1.2em;
+.answear_form {
+    margin: 0 0 1em 0;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#A9F5A9, #A9F5A9);
+    box-shadow: 2px 2px 5px #888888;
 }
 
-textarea {
-  font-size: 1.2em;
-  width: 500px;
-  min-height: 200px;
+.divQuestionCommentForm {
+    margin: 0 0 1em 5em;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#CEECF5, #A9E2F3);
+    box-shadow: 2px 2px 5px #888888;
 }
 
-p.buttons {
-  padding-top: 22px;
-  padding-bottom: 22px;
-} 
+.commentcommentForm {
+    margin: 0 0 1em 5em;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#CEECF5, #A9E2F3);
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.question_form  {
+    margin: 0 0 1em 0;
+    padding: 0.5em;
+    max-width: 75%;
+    border-radius: 4px;
+    background: linear-gradient(#EFF5FB, #EFF2FB);
+    box-shadow: 2px 2px 5px #888888;
+}
+.question_form textarea {
+    height: 10em;
+    width: 50em;
+}

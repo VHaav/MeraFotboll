@@ -1,0 +1,23 @@
+/** Style for comments
+*/
+
+.comments {
+    
+}
+
+.single-comment {
+    padding: 0.5em 2em 0.5em 2em;
+    margin-bottom: 2em;
+    max-width: 90%;
+}
+
+.single-comment a {
+    text-decoration: none;
+    color: black;
+}
+
+.single-comment a:hover {
+    text-decoration: underline;
+    color: white;
+}
+

@@ -1,0 +1,226 @@
+<?php
+
+namespace Anax\Comment;
+
+/**
+ * To attach comments-flow to a page or some content.
+ *
+ */
+class CommentController implements \Anax\DI\IInjectionAware
+{
+    use \Anax\DI\TInjectable,
+        \Anax\Comment\TAccessCommon;
+    
+    private static $redirectPage;
+    
+    public function initialize()
+    {
+        $this->comments = new \Anax\Comment\Comment();
+        $this->comments->setDI($this->di);
+        
+        $this->answears = new \Anax\Comment\Answear();
+        $this->answears->setDI($this->di);
+        
+        $this->commentcomments = new \Anax\Comment\CommentComment();
+        $this->commentcomments->setDI($this->di);
+        
+        $this->tags = new \Anax\Comment\Tag();
+        $this->tags->setDI($this->di);
+    }
+
+    /**
+     * View all comments matching the callerKey.
+     *
+     * @return void
+     */
+    public function viewAction($callerKey)
+    {
+        $comments = $this->comments->query()
+            ->where("comment_page = ?")
+            ->execute([$callerKey]);
+            
+        $this->views->add('comment/comments', ['comments' => $comments]);
+    }
+
+    /**
+     * Add a comment.
+     *
+     * @return void
+     */
+    public function addAction($params = null)
+    {
+        if (!isset($params)) {
+            die("Missing comment parameters!");
+        }
+        if($this->di->session->get('user') !== null) {
+            $user = $this->di->session->get('user');
+            $now = date('Y-m-d H:i:s');
+            $this->comments->save([
+                'name' => $user->acronym,
+                'user' => $user->id,
+                'title' => $params['title'],
+                'message' => $params['message'],
+                'timestamp' => $now,
+                'comment_page' => $this->request->extractRoute()
+            ]);
+            $id = $this->di->db->lastInsertId();
+            $this->setTags($params['tag'], $id);
+            $url = $this->request->getCurrentUrl();
+            $this->response->redirect($url);
+        }
+        else{
+            $url = $this->di->url->create('form/login');
+            $this->response->redirect($url);
+        }        
+    }
+    
+    public function editFormAction($id)
+    {
+        if (!isset($id)) {
+            die("Missing id");
+        }
+        self::$redirectPage = $this->request->getPost('redirect');
+        $comment = $this->comments->find($id);
+        $params = array('id' => $id, 'name' => $comment->name, 'homepage' => $comment->homepage, 'message' => $comment->message);
+        $this->di->dispatcher->forward([
+            'controller' => 'form',
+            'action' => 'edit-comment',
+            'params' => [$params]
+        ]);
+    }
+    
+    /** Edit a comment
+    */
+    public function editAction($params = null){
+        if (!isset($params)) {
+            die("Missing comment parameters!");
+        }
+        $this->comments->save([
+            'id' => $params['id'],
+            'name' => $params['name'],
+            'homepage' => $params['homepage'],
+            'message' => $params['message']
+        ]);
+    }
+    
+    /** Remove a comment
+    */
+    public function removeAction($id){
+        if (!isset($id)) {
+            die("Missing id");
+        }
+        $res = $this->comments->delete($id);
+        $this->response->redirect($this->request->getPost('redirect'));
+    }
+    
+    /**
+    * Sets the tags on a new question/comment.
+    * Takes a string containing the tags, seperated by spaces, and the ID of the question/comment.
+    * 
+    **/
+    public function setTags($tagsString, $commentID)
+    {
+        $tags = explode(' ', $tagsString);
+        foreach($tags as $tag){
+            $this->tags->create([
+                'questionID' => $commentID,
+                'tag' => $tag,
+            ]);
+        }
+    }
+    
+    public function getAllTagsAction()
+    {
+        $tags = $this->getAllTags();
+        $this->views->add('comment/tags', ['tags' => $tags]);
+    }
+    
+    public function getAllTags()
+    {
+        $sql = "SELECT DISTINCT tag FROM kmom07_tag";
+        $tags = $this->di->db->executeFetchAll($sql);
+        return $tags;
+    }
+    
+    /**
+    * Gets all the tags belonging to a question/comment.
+    * Takes the ID of the question/comment.
+    * 
+    **/
+    public function getCommentTags($id)
+    {
+        $tags = $this->tags->query()
+            ->where('questionID = ?')
+            ->execute([$id]);
+        return $tags;
+    }
+    
+    public function resetAction()    
+    {
+        $this->di->db->dropTableIfExists('comment')->execute();
+        $this->di->db->createTable(
+            'comment',
+            [
+                'id' => ['integer', 'primary key', 'not null', 'auto_increment'],
+                'name' => ['varchar(80)'],
+                'title' => ['varchar(40)'],
+                'user' => ['integer', 'not null', 'references kmom07_user(id)'],
+                'message' => ['varchar(140)'],
+                'timestamp' => ['datetime'],
+                'comment_page' => ['text'],
+            ]
+        )->execute();
+        
+        $url = $this->url->create('');
+        $this->response->redirect($url);
+    }
+    
+    public function selectCommentAction($id)
+    {
+        $this->di->theme->setTitle('Vald fråga');
+        //hämta frågan från DB
+        $question = $this->getCommentByIDAction($id);
+        $answears = $this->getAnswearsByCommentID($id);
+        $comments = $this->getCommentCommentsByCommentID($id);
+        
+        $this->getAnswearComments($answears); // fetches all comments to each answear and adds them to the objects, se used trait
+        
+        $this->views->add('comment/selected_comment', [
+            'id' => $id, 
+            'question' => $question,
+            'answears' => $answears, 
+            'comments' => $comments,
+            'tags' => $this->getCommentTags($id),
+        ]);
+    }
+    
+    public function getCommentByIDAction($id)
+    {
+        $result = $this->comments->query()
+            ->where("id = ?")
+            ->execute([$id]);
+        return $question = ($result) ? $result[0] : "";
+    }
+    
+    public function getCommentsByTagAction($tag)
+    {
+        $tag = urldecode($tag);
+        $tags = $this->tags->query()
+            ->where("tag = ?")
+            ->execute([$tag]);
+        
+        $questionIDs = array();
+        foreach($tags as $tag){
+            $questionIDs[] = $tag->questionID;
+        }
+        $comments = array();
+        foreach($questionIDs as $id){
+            $comment = $this->comments->query()
+                ->where("id = ?")
+                ->execute([$id]);
+                
+            $comments[] = $comment[0];
+        } 
+        $this->views->add('comment/comments', ['comments' => $comments]);
+    }
+}

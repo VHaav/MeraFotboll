@@ -1,0 +1,70 @@
+/** Style for comments
+*/
+
+.comments {
+    
+}
+
+.single-comment {
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 1em;
+    max-width: 50%;
+    border-radius: 4px;
+    background: linear-gradient(#EFF5FB, #EFF2FB);
+    box-shadow: 2px 2px 5px #888888;
+    color: black;
+}
+
+.single-comment:hover {
+    box-shadow: 6px 6px 5px #888888;
+}
+
+.divQuestion {
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#EFF5FB, #EFF2FB);
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.divAnswear {
+    margin: 0 0 1em 0;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#A9F5A9, #A9F5A9);
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.divCommentComment {
+    margin: 0 0 1em 5em;
+    padding: 0.5em;
+    border-radius: 4px;
+    background: linear-gradient(#CEECF5, #A9E2F3);
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.single_tag {
+    display: inline-block;
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid #BDBDBD;
+    background: #F2F2F2;
+    box-shadow: 1px 1px 2px #888888;
+    color: black;
+}
+
+.user_stamp {
+    margin: 1em 2em 1em 0;
+    color: black;
+    display: inline-block;
+     
+}
+.user_stamp img {
+    float: left;
+    margin-right: 0.5em;
+}
+.user_stamp a {
+    text-decoration: none;
+    color: black;
+}
+

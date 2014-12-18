@@ -61,3 +61,25 @@ function mergesort(&$array, $cmp_function)
     while ($ptr2 < count($array2)) $array[] = $array2[$ptr2++];
     return;
 }
+
+function swe_encode($string)
+{
+    $replace_pairs = array(
+        "å" => "a;",
+        "ä" => "a:",
+        "ö" => "o:"
+    );
+    $temp = strtr($string, $replace_pairs);
+    return $temp;
+}
+
+function swe_decode($string)
+{
+    $replace_pairs = array(
+        "a;" => "å",
+        "a:" => "ä",
+        "o:" => "ö"
+    );
+    $temp = strtr($string, $replace_pairs);
+    return $temp;
+}

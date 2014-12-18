@@ -1,0 +1,1 @@
+> Sidan är skapad av Ville Haavisto som studerar webbutveckling på Blekinge tekniska högskola. Kursen behandlar PHP och MVC, och denna sida är en del av kursens examinerande moment.

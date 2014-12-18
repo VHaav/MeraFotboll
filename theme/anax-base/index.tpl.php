@@ -15,9 +15,17 @@
 
 <div id='wrapper'>
 
-<div id='header'>
+<div class='inline-block' id='header'>
 <?php if(isset($header)) echo $header?>
 <?php $this->views->render('header')?>
+</div>
+
+<div class='right' id='loggin'>
+    <?php
+        echo <<<EOD
+            <a href="{$this->url->create("form/login")}">login</a>
+EOD;
+    ?>
 </div>
 
 <?php if ($this->views->hasContent('navbar')) : ?>
